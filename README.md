@@ -1,7 +1,7 @@
 # project_2.3.2
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/mrliber8/project_2.3.2)
-[![GitHub license](https://img.shields.io/github/license/YourUsername/YourRepositoryName.svg)](https://github.com/YourUsername/YourRepositoryName/blob/main/LICENSE)
+![GitHub License](https://img.shields.io/github/license/mrliber8/project_2.3.2)
 ![Python Version](https://img.shields.io/badge/python-3.x-blue.svg)
 ![Security](https://img.shields.io/badge/security-network%20scanning-blueviolet)
 
