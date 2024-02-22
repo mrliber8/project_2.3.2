@@ -2,6 +2,7 @@ from tabulate import tabulate
 import turtle
 import socket
 import pyfiglet
+import nmap
 
 
 def test():
@@ -48,7 +49,18 @@ def host():
   print(b)
 
 
-host()
+def os_fingerprint():
+  path = [r"C:\Program Files (x86)\Nmap\nmap.exe",] 
 
+  nm = nmap.PortScanner(nmap_search_path=path)
+
+  os_scan = nm.scan('localhost', arguments='-O')
+
+  #print("Os information1: ", os_scan['scan']['127.0.0.1']['osmatch'][0])
+  print("Os version: ", os_scan['scan']['127.0.0.1']['osmatch'][0]['name'])
+
+
+
+os_fingerprint()
+#host()
 #printart()
-#print(f"IP: {item['ip']}, MAC: {item['mac']}")
