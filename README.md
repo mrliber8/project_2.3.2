@@ -11,7 +11,7 @@ This project is part of a series of practical assignments focused on implementin
 - [Assignment 2: Network Mapper](#assignment-2-network-scanner)
 - [Assignment 3: Side Channel Attack](#assignment-3-side-channel-attack)
 - [Assignment 4: Cryptography](#assignment-4-cryptography)
-- [Assignment 5: Vulnerability Scan](#assignment-3-vulnerability-scan)
+- [Assignment 5: Vulnerability Scan](#assignment-5-vulnerability-scan)
 
 ## Assignment 2: Network Scanner
 For this assignment we had to make a network scanner in python, while using the nmap module as least as possible
