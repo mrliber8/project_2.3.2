@@ -1,14 +1,5 @@
 """
-Eisen Netwerkscanner 
-1.	De gebruiker kan zowel een volledig subnet scannen, als één specifieke host. 
-2.	De scanner is in staat om de volgende informatie van hosts in het netwerk te identificeren: 
-    a.	Het IP-adres 
-    b.	Het MAC-adres 
-    c.	Openstaande poorten 
-    d.	Welke service bij een openstaande poort hoort 
-    e.	De hostnaam 
-    f.	Het besturingssysteem 
-3.	De output van de scanner is overzichtelijk, makkelijk leesbaar, en netjes geformatteerd (gebruik hiervoor bijvoorbeeld f-strings)
+
 """
 import scapy.all as scapy
 from scapy.all import srp, Ether, ARP, conf
@@ -16,6 +7,7 @@ import socket
 from datetime import datetime
 import sys
 from tabulate import tabulate
+from test import printart
 
 
 # 2.a and b.
@@ -23,7 +15,6 @@ from tabulate import tabulate
 def scan_ip_and_mac(target):
     # Define the Arp request
     arp_request = ARP(pdst=target)
-    #print(arp_request.summary())
 
     # Give the range where to send it, ff:ff:ff:ff:ff:ff means everyone
     broadcast = Ether(dst="ff:ff:ff:ff:ff:ff")
@@ -52,18 +43,10 @@ def scan_ip_and_mac(target):
 
 # 2.c and d, open ports and the services that belong to it
 def port_and_service_scan(ip, port):
-    #Loop through the list
-    #for item in ip_and_mac_list:
-    #    print(f"IP: {item['ip']}, MAC: {item['mac']}")
-
     # Make a new socket object
         # AF_INET is IPV4
         # SOCK_STREAM is TCP
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    # For testing:
-    #ip = '8.8.8.8'
-    #port = 53
     
     # connect_ex() returns 0 if it can connect
     socket.setdefaulttimeout(1)
@@ -82,19 +65,18 @@ def port_and_service_scan(ip, port):
     return False, None
     
 
-
 def main():
     # 1.	De gebruiker kan zowel een volledig subnet scannen, als één specifieke host.
     target = sys.argv[1]
+    printart()
+    start_time = datetime.now()
 
     # 2. a and b
     ip_and_mac_list = scan_ip_and_mac(target)
 
     #Loop through the list
     for item in ip_and_mac_list:
-        #print(f"IP: {item['ip']}, MAC: {item['mac']}")
         ip = item['ip']
-        #print("IP\t\t\tMAC Address\t\t\tOpen Ports\t\t\tServices")
         open_ports = []
         services = []
 
@@ -103,21 +85,22 @@ def main():
         port_list = [21221, 31016, 5601, 10051]
         for port in port_list:
         #for port in range(1, 1025):
-                #print(port)
                 status, service = port_and_service_scan(ip, port)
                 if status:
                     open_ports.append(str(port))
                     services.append(service)
-                    #print(port)
-                    #print(service)
                     list = [item['ip'], item['mac'], port, service]
                     table.append(list)
-                    #print(item['ip'], item['mac'], port, service)
                   
+    end_time = datetime.now()
+    total_time = end_time - start_time
+    print("Network scanner completed in: ", total_time)
+    
     if len(table)> 1:
         print(tabulate(table))
     else:
         print("Failure :(")
+
 
 if __name__ == "__main__":
     main()
