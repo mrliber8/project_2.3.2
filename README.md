@@ -29,10 +29,42 @@ For this assignment we had to make a network scanner in python, while using the 
 - **Colors**: I don't know why, but I have to print using colors?? So I guess this is a to do topic
 
 ### Installation
-1. Clone the repo
-2. Run the main.py file
-3. ?
-4. Profit
+1. Modules
+This scanner uses the following modules:
+* argparse
+* nmap
+* pyfiglet
+* scapy.all as scapy
+* socket
+* sys
+* colorama
+* datetime
+* scapy.all
+* tabulate
+
+If one of these modules is not already installed, pleas do so using:
+```
+pip install module_name
+```
+
+2. Run the scanner.py file
+The main.py file is depricated and should not be used. You can run the scanner.py file from the command line with the following options:
+```
+usage: scanner.py [-h] [-m] [-s] [-n] [-f] target
+
+A nice network scanner based on python's scapy and socket module
+
+positional arguments:
+  target             Input a network address or a subnet
+
+options:
+  -h, --help         show this help message and exit
+  -m, --mac          Choose if you want the mac address
+  -s, --service      Choose if you want an estimation of the sevrice behind a port
+  -n, --hostname     Choose if you want an estimation of the hostname
+  -f, --fingerprint  Choose if you want an estimation of the OS name
+```
+
 
 ## Assignment 3: Side Channel Attack
 
