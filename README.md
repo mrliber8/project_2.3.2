@@ -23,10 +23,10 @@ For this assignment we had to make a network scanner in python, while using the 
 - **Host and OS name**: Able to retrieve not only the hostname, but also the os name of the targeted host(s)
 
 ### To do
-- **All in one**: Now some features are in a second file, lets turn this into one
-- **Command line flags**: Its a bonus, so I guess I have to add some flags
 - **Progress**: Adding print statements to show progress reports. This will be my first time that print statements are a feature and not for testing
-- **Colors**: I don't know why, but I have to print using colors?? So I guess this is a to do topic
+
+### Action
+![Gif of the script in action](https://github.com/mrliber8/project_2.3.2/blob/main/py_network_scanner/test1.gif)
 
 ### Installation
 1. Modules
