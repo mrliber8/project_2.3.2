@@ -12,7 +12,7 @@ from test import printart
 
 # 2.a and b.
 # Arp requests consists of IP and Mac address
-def scan_ip_and_mac(target):
+def scan_ip_and_mac(target, mac):
     # Define the Arp request
     arp_request = ARP(pdst=target)
 
@@ -71,8 +71,16 @@ def main():
     printart()
     start_time = datetime.now()
 
+    ##### Flag Logic
+
+    mac = False
+    '''
+    If flag:
+        Mac = true    
+    '''
+
     # 2. a and b
-    ip_and_mac_list = scan_ip_and_mac(target)
+    ip_and_mac_list = scan_ip_and_mac(target, mac)
 
     #Loop through the list
     for item in ip_and_mac_list:
