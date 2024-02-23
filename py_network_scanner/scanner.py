@@ -1,13 +1,14 @@
-import scapy.all as scapy
-from scapy.all import srp, Ether, ARP, conf
-import socket
-#from datetime import datetime
-#import sys
-from tabulate import tabulate
-import pyfiglet
 import argparse
 import nmap
+import pyfiglet
+import scapy.all as scapy
+import socket
+import sys
+
 from colorama import Fore, Back, Style
+from datetime import datetime
+from scapy.all import srp, Ether, ARP, conf
+from tabulate import tabulate
 
 
 def main():
@@ -23,7 +24,8 @@ def main():
     # Parse the flags
     args = parser.parse_args()
 
-    printart()
+    #printart()
+    print("-----------------------------------------------------------------------------------")
 
     # Check the subnet
     target = args.target
@@ -32,6 +34,8 @@ def main():
         target = target + '/32'
     
     print(Fore.MAGENTA + 'Starting the scan for the subnet: ', target)
+    print("-----------------------------------------------------------------------------------")
+
     print(Fore.BLUE)
 
     # Check the mac option
@@ -52,8 +56,10 @@ def main():
         closed_ports = []
         services = []
 
-        port_list = [21221, 31016, 5601, 10051]
+        #port_list = [21221, 31016, 5601, 10051]
+        port_list = [22, 80]
         print(Fore.GREEN)
+        print("-----------------------------------------------------------------------------------")
         for port in port_list:
         #for port in range(1, 1025):
                 status, service_name = port_and_service_scan(ip, port, service)
@@ -68,23 +74,33 @@ def main():
                     closed_ports.append(str(port))
 
     print(Fore.CYAN)
+    print("-----------------------------------------------------------------------------------")
     if args.mac:
         print("ip: ", ip_list, "mac: ", mac_list)
     else:
         print("ip: ", ip_list)
-
+    
+    print(Fore.YELLOW)
+    print("-----------------------------------------------------------------------------------")
     for ip in ip_list:
         if args.hostname:
             hostname_list = hostname(ip)
-            print(Fore.YELLOW + "ip: ", ip, "hostname : ", hostname_list)
-
+            print("ip: ", ip, "hostname : ", hostname_list)
+    
+    print(Fore.RED)
+    print("-----------------------------------------------------------------------------------")
+    for ip in ip_list:
         if args.fingerprint:
             fingerprint_list = os_fingerprint(ip)
-            print(Fore.RED + "Os version: ", fingerprint_list)    
+            print("Os version: ", fingerprint_list)    
+
+    print(Fore.RESET)
+    print("-----------------------------------------------------------------------------------")
+
 
 
 def os_fingerprint(ip):
-  ip = 'localhost'
+
   # Hardcoded becouse nmap wants to make my life hard
   path = [r"C:\Program Files (x86)\Nmap\nmap.exe",] 
 
@@ -92,17 +108,13 @@ def os_fingerprint(ip):
 
   os_scan = nm.scan(ip, arguments='-O')
 
-  #print("Os information1: ", os_scan['scan']['127.0.0.1']['osmatch'][0])
-  #print("Os version: ", os_scan['scan']['127.0.0.1']['osmatch'][0]['name'])
-  return os_scan['scan']['127.0.0.1']['osmatch'][0]['name']
+  return os_scan['scan'][ip]['osmatch'][0]['name']
 
 
 def hostname(ip):
-  #ip = "8.8.8.8"
-  #Reverse dns lookup, gives this output: (hostname, alias-list, IP)
-  #hostname = socket.gethostbyaddr(ip)
-  #print(a)
-  hostname = socket.getfqdn(ip)
+
+  hostname = socket.gethostbyaddr(ip)
+
   return hostname   
 
 
@@ -143,13 +155,14 @@ def scan_ip_and_mac(target, mac):
     arp_request_broadcast = broadcast/arp_request         
 
     # Send the Arp request
-    answer, no_answer = scapy.srp(arp_request_broadcast, timeout = 1)
+    #answer, no_answer = scapy.srp(arp_request_broadcast, timeout=5, iface="WAN Miniport (Network Monitor)")
+    answer, no_answer = srp(arp_request_broadcast, timeout=10, iface="VMware Virtual Ethernet Adapter for VMnet8")
+
     print("answer: ", answer)
     print("no_answer: ", no_answer)
 
-    # Add the outputs to a list
-    ip_list=["10.5.4.116"]
-    mac_list=["hello"]
+    ip_list=[]
+    mac_list=[]
 
     for element in answer:
         if mac:
@@ -178,12 +191,6 @@ def printart():
   T = ("p.r.ten.brinke@st.hanze.nl")
   ASCII_art_1 = pyfiglet.figlet_format(T)
   print(ASCII_art_1)    
-
-
-
-
-    
-
 
 
 main()
