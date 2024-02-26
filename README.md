@@ -30,21 +30,20 @@ For this assignment we had to make a network scanner in python, while using the 
 
 ### Installation
 1. Modules
-This scanner uses the following modules:
-* argparse
-* nmap
-* pyfiglet
-* scapy.all as scapy
-* socket
-* sys
+For this scanner, the following non-standard modules where imported:
 * colorama
-* datetime
-* scapy.all
+* pyfiglet
+* python-nmap
+* scapy
 * tabulate
 
 If one of these modules is not already installed, pleas do so using:
 ```
 pip install module_name
+```
+Or by using 
+```
+pip install -r requirements.txt
 ```
 
 2. Run the scanner.py file
