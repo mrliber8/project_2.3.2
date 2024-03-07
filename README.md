@@ -66,6 +66,7 @@ options:
 
 
 ## Assignment 3: Side Channel Attack
+In this assignment we had to practice with a side-channel attack. A "vulnerable" server was setup that checks the password charcter for character. By timing the response it is possible to guess if the character is correct or not.
 
 ## Assignment 4: Cryptography
 
