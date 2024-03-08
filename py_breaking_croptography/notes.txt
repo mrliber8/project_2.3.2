@@ -1,0 +1,46 @@
+Stream ciphers vs block ciphers:
+
+Achter de plaintext kun je een geheim zetten
+
+1. Plaintekst
+2. Initialization vector
+3. key
+4. Ciphertekst
+5. Cryptogrpahic Oracle
+6. Cryptographic Scheme
+7. Cryptographic Protocol
+
+def encrypt(plaintekst):
+    input = plaintekst + "secret"
+    return AES.encrypt(input)
+
+
+Hoe kom je achter de suffix: --> 128 bit sleutel
+ De output is altijd 16 bites
+ PT = a
+ oracle krijgt a + secret
+ uitkomst = 16 bytes
+
+ pt = aa
+ oracle krijgt aa + secret 
+ uitkomst is weer 16 bytes
+
+ pt = aaaaaaaaaa
+ oracle krijgt aaaaaaaaaa + secret
+ uitkomst is weer 16 bytes
+
+ pt = aaaaaaaaaaa
+ oracle krijgt aaaaaaaaaaa + secret 
+ uitkomst is 32 bytes
+
+ Dus de lengte van het geheim is 6 posities
+
+Hoe kan je de aanval doen?
+ Je weet dat het geheim uit 6 posities bestaat
+ plaintekst = 15xa
+ oracle is 15xa+secret
+   aaaaaaaaaaaaaaasecret
+
+
+   15xa + s is 1 blok, dus als we dit onthouden kunen we in een loop de laatste index met 1 char verhogen en weer opnieuw versleutelen dan kunnen we raden welke letter het is.
+   
