@@ -11,6 +11,15 @@ from scapy.all import srp, Ether, ARP, conf
 from tabulate import tabulate
 
 
+'''
+Notities uit gesprek met Mark:
+Udp poorten moeten nog worden geimplementeerd, helemaal vergeten xd
+Poorten staan nu nog op maar 2 vanwege het testen, dit nog snel omzetten naar een loop
+Kijken naar multithreading
+Scannen alleen in het eigen netwerk
+'''
+
+
 def main():
     # Define the parser
     parser = argparse.ArgumentParser(description="A nice network scanner based on python's scapy and socket module")
@@ -18,13 +27,14 @@ def main():
     parser.add_argument('target', help='Input a network address or a subnet')
     # Get the flags
     parser.add_argument('-m', '--mac', help='Choose if you want the mac address', action='store_true')
-    parser.add_argument('-s', '--service', help='Choose if you want an estimation of the sevrice behind a port', action='store_true')
+    parser.add_argument('-s', '--service', help='Choose if you want an estimation of the service behind a port', action='store_true')
     parser.add_argument('-n', '--hostname', help='Choose if you want an estimation of the hostname', action='store_true')
     parser.add_argument('-f', '--fingerprint', help='Choose if you want an estimation of the OS name', action='store_true')
     # Parse the flags
     args = parser.parse_args()
 
-    #printart()
+    printart()
+    
     print("-----------------------------------------------------------------------------------")
 
     # Check the subnet
@@ -44,6 +54,10 @@ def main():
         ip_list, mac_list = scan_ip_and_mac(target, mac)
     else:
         ip_list = scan_ip_and_mac(target, False)
+
+    if len(ip_list) < 1:
+        sys.exit("Found nothing")
+
 
     # If service option is not used, set it to false
     if not args.service:
@@ -113,7 +127,15 @@ def os_fingerprint(ip):
 
 def hostname(ip):
 
-  hostname = socket.gethostbyaddr(ip)
+  try:
+    hostname = socket.gethostbyaddr(ip)
+  except socket.herror as e:
+    if e.errno == 11004:
+        hostname = "not found"
+    else:
+        hostname = "Socket error occured"
+  except Exception as e:
+        hostname = "Something went wrong"
 
   return hostname   
 
@@ -156,7 +178,8 @@ def scan_ip_and_mac(target, mac):
 
     # Send the Arp request
     #answer, no_answer = scapy.srp(arp_request_broadcast, timeout=5, iface="WAN Miniport (Network Monitor)")
-    answer, no_answer = srp(arp_request_broadcast, timeout=10, iface="VMware Virtual Ethernet Adapter for VMnet8")
+    answer, no_answer = srp(arp_request_broadcast, timeout=30, iface="VMware Virtual Ethernet Adapter for VMnet8")
+    #answer, no_answer = srp(arp_request_broadcast, timeout=10)
 
     print("answer: ", answer)
     print("no_answer: ", no_answer)
