@@ -66,8 +66,28 @@ options:
 
 
 ## Assignment 3: Side Channel Attack
-In this assignment we had to practice with a side-channel attack. A "vulnerable" server was setup that checks the password charcter for character. By timing the response it is possible to guess if the character is correct or not.
+In this assignment, we had to practice a side-channel attack. A "vulnerable" server was set up to check the password character by character. By timing the response, it is possible to determine whether a character is correct.
+
+To achieve this, I developed 3 main functions:
+
+1. `find_username`
+   * This function sends a string of numbers to the server. If the response is 'Incorrect password. Access Denied.', we know the username exists; otherwise, it is not valid.
+2. `find_password_length`
+   * Since the server first checks the password length and, if it is correct, sleeps for a short time before checking the first character, the length that takes the longest to process is most likely the correct length.
+3. `find_password`
+   * Once the username and password length are known, we can attempt to guess the password. Starting at index 0, we fill the rest of the string with zeros. We then send a character 'x' number of times, repeating this for every possible character at that index. The character with the highest mean response time is most likely the correct one, so we fill the index with that character and then proceed to the next index.
+
+To support the `find_password` function, I also created a helper function:
+1. `increment_char`
+    * This function takes a character, converts it into Unicode, increments it by one, then converts it back into a character and returns it.
 
 ## Assignment 4: Cryptography
+In this assignment the goal was to learn about several encryption methods, to ultimately execute an Adaptive Chosen-plaintext attack.
+
+* Base 64 encoding
+* Binary XOR
+* ECB-mode AES (Electronic Codebook)
+* CBC-mode AES
+* Adaptive Chosen-plaintext Attack (ACPA)
 
 ## Assignment 5: Vulnerability Scan
