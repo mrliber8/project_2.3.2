@@ -1,9 +1,10 @@
 #Wat is het verschil tussen b’hello world` en “hello world”? 
+'''
 # b'hello world' is een byte string van hello world. Aangezien 
 # encryptie werkt met binaire data kan je het met b omzetten.
 # Als je dit alleen omzet kom je alsnog uit op hello world, doordat dit
 # ASCII karakters zijn die direct overeenkomen met UTF-8 codering 
-
+'''
 import base64
 
 
@@ -78,7 +79,6 @@ def base64encoding(string):
     # 1.2 Zet om naar 8 bit
     list1 = []
     for ordc in list:
-        #list1.append("{0:b}".format(ordc))
         list1.append(format(ordc, '08b'))
 
     print("ascii_to_8bit", list1)
@@ -126,12 +126,84 @@ def base64encoding(string):
         base64_list.append(base64_alphabet_string[x])
 
     print("base64 output: ", base64_list)
-    return True
+    return base64_list
 
 
-base64encoding("Hi")
+#base64encoding("Hi")
 
+#print("----------------------------")
 
-def base64encoding(string):
+def base64decoding(string):
     
-    return True
+    base64_alphabet_string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+    # base64encoding() but backwards??
+
+    # 2.1 Convert the base64 text to decimal
+    decimal_list = []
+    for x in string:
+        decimal_list.append(base64_alphabet_string.index(x))
+        #print(base64_alphabet_string.index(x))
+
+    print("base64 to dec: ",decimal_list)
+
+    # 2.2 Convert Decimal to 6 binary
+    #'{0:06b}'.format(6)
+    #list1.append(format(ordc, '08b'))
+    binary6_list = []
+    for x in decimal_list:
+        binary6_list.append(format(x, '06b'))
+
+    print("Dec to bin6: ", binary6_list)
+
+    # 2.3 Convert back from 24 sequence
+    while binary6_list[-1] == '000000':
+        binary6_list.pop()
+
+    print("bin6 but not 24: ", binary6_list)
+
+    # 2.3 Convert to 8bit
+    bit8_list = []
+    bit8_string = ""
+    counter = 0
+
+    list_string = ''.join(binary6_list)
+    print("bin6 but not 24 str: ", list_string)
+
+    for element in list_string:
+        if counter <7:
+            bit8_string += element
+            counter += 1
+        else:
+            bit8_string += element
+            bit8_list.append(bit8_string)
+            bit8_string = ""
+            counter = 0
+
+    print("binary8 list: ", bit8_list)
+
+    decimal_list = []
+    for element in bit8_list:
+        decimal_list.append(int(element, 2))
+
+    print("bin8 to dec: ", decimal_list)
+
+    char_list = []
+    for element in decimal_list:
+        char_list.append(chr(element))
+
+    print(char_list)
+
+    return char_list
+
+
+input = "Hello World this is patrick!"
+
+base64_string = ''.join(base64encoding(input))
+ascii_string = ''.join(base64decoding(base64_string))
+
+if ascii_string != input:
+    print("Something went wrong")
+elif ascii_string == input:
+    print("Succes!")
+else:
+    print("How.....?")
