@@ -1,6 +1,7 @@
 from base64 import b64decode
 from Crypto.Cipher import AES
 from secrets import token_bytes
+from base64 import b64encode
 
 def pkcs7_pad(plaintext, blocksize):
     """Appends the plaintext with n bytes,
@@ -65,7 +66,74 @@ def find_block_length():
     blocksize : integer
         blocksize used by ECB oracle
     """
+    # Start by sending an empty string
+    data = b''
+    initial_len = len(ECB_oracle(data, key))
 
-    return blocksize
+    while True:
+        data += b'X'
+        new_len = len(ECB_oracle(data, key))  # Encrypt the data
+        if new_len > initial_len:  # Check if the ciphertext length increased
+            blocksize = new_len - initial_len  # The increase in length is the blocksize
+            return blocksize
 
 
+blocksize = find_block_length()
+print('Blocksize is: ', blocksize)
+
+
+#target_ciphertext = ECB_oracle(data, key)
+
+def get_target_ciphertext(blocksize):
+    data = b''
+    for x in range(blocksize-1):
+        data += b'X'
+
+
+    #padding = b'X' * (blocksize - 1)  # Create padding one byte short of the blocksize
+    #target_ciphertext = ECB_oracle(padding, key)  # Encrypt the padding
+    target_ciphertext = ECB_oracle(data, key)
+    return target_ciphertext
+
+# Gebruik de eerder gevonden blocksize
+target_ciphertext = get_target_ciphertext(blocksize)
+print(f"Target ciphertext: {target_ciphertext}")
+
+
+def discover_first_byte(blocksize, target_ciphertext):
+    discovered_byte = b''
+
+    # bytes = 8bit = 11111111 = 256
+    for byte in range(256):
+
+        # Padding - 1
+        data = b''
+        for x in range(blocksize-1):
+            data += b'X'
+
+        # Send it to the oracle
+        guess = data + bytes([byte])
+        guessed_ciphertext = ECB_oracle(guess, key)
+
+        # If it matches, we found it!
+        if guessed_ciphertext[:blocksize] == target_ciphertext[:blocksize]:  # Vergelijk met doelciphertext
+            discovered_byte = bytes([byte])  # Byte gevonden
+            break
+
+    return discovered_byte
+
+
+
+first_byte = discover_first_byte(blocksize, target_ciphertext)
+print('First byte: ', first_byte)
+
+
+def find_secret_text():
+    '''
+    Herhaal stap c & e voor de resterende bytes, totdat je de geheime tekst hebt gevonden. 
+    Doe dit door je padding steeds één byte kleiner te maken en aan te vullen met de 
+    ontdekte letter uit de geheime tekst. 
+    Hint: Je zal je functie per blok te werken moeten laten gaan.
+    
+    '''
+    pass
